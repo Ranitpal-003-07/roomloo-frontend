@@ -1,0 +1,72 @@
+.roommate-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 320px;
+  background: #ffe5b4; /* soft peach color */
+  border-radius: 1.2rem;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.roommate-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
+}
+
+.roommate-img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+
+.roommate-info-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem;
+  gap: 1rem;
+  position: relative;
+}
+
+.roommate-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.roommate-info h3 {
+  font-size: 1.2rem;
+  margin: 0;
+  color: #222;
+}
+
+.roommate-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.match-badge {
+  display: flex;
+  align-items: start;
+  justify-content: center;
+}
+
+.match-circle {
+  width: 55px;
+  height: 55px;
+  background: linear-gradient(135deg, #ffb347, #ff7f50); /* deeper orange-peach gradient */
+  border-radius: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

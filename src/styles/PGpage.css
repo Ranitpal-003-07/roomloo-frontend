@@ -1,0 +1,559 @@
+/* PGpage.css - Fixed styling for PG search and filter page */
+
+/* General Container */
+.pg-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+  color: #333;
+  background-color: #f9fafb;
+}
+
+/* Search Bar Styling */
+.search-bar-container {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid #e0e7ff;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+}
+
+.search-bar::placeholder {
+  color: #9ca3af;
+}
+
+/* PG Content Layout */
+.pg-content {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+}
+
+/* Filter Section */
+.filter-section {
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  height: fit-content;
+  position: sticky;
+  top: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.filter-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #111827;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.75rem;
+}
+
+.filter-section h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #4b5563;
+}
+
+.filter-group {
+  margin-bottom: 1.75rem;
+}
+
+/* Reset Filters Button */
+.reset-filters-button {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.reset-filters-button:hover {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+/* Map Placeholder */
+.map-placeholder {
+  height: 200px;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+  border: 1px dashed #d1d5db;
+}
+
+/* Price Slider */
+.price-slider {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  background: linear-gradient(to right, #6366f1, #a5b4fc);
+  border-radius: 5px;
+  margin: 1rem 0;
+}
+
+.price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4f46e5;
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.price-range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* Room Type Slider */
+.room-slider {
+  width: 100%;
+  height: 6px;
+  -webkit-appearance: none;
+  background: linear-gradient(to right, #6366f1, #a5b4fc);
+  border-radius: 5px;
+  margin: 1rem 0;
+}
+
+.room-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4f46e5;
+  cursor: pointer;
+  border: 3px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.room-type-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+/* Fixed Checkbox Styling */
+.amenity-checkbox,
+.location-checkbox,
+.college-checkbox {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.amenity-checkbox input[type="checkbox"],
+.location-checkbox input[type="checkbox"],
+.college-checkbox input[type="checkbox"] {
+  position: relative; /* Changed from absolute to make it visible */
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  margin-right: 0.75rem;
+  cursor: pointer;
+  background-color: white;
+  vertical-align: middle;
+}
+
+.amenity-checkbox input[type="checkbox"]:checked,
+.location-checkbox input[type="checkbox"]:checked,
+.college-checkbox input[type="checkbox"]:checked {
+  background-color: #4f46e5;
+  border-color: #4f46e5;
+}
+
+/* Checkmark */
+.amenity-checkbox input[type="checkbox"]:checked::after,
+.location-checkbox input[type="checkbox"]:checked::after,
+.college-checkbox input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Location and College Section Enhancements */
+.filter-group label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+/* Empty State for Location and College */
+.filter-group .empty-state {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  font-style: italic;
+  padding: 0.5rem 0;
+}
+
+/* PG Listings Section */
+.pg-listings {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+/* PG Card Styling */
+.pg-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.pg-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+}
+
+.pg-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.pg-card-content {
+  padding: 1.25rem;
+}
+
+.pg-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.pg-card-location {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.pg-card-location svg {
+  margin-right: 0.5rem;
+  color: #6366f1;
+}
+
+.pg-card-price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #4f46e5;
+  margin-top: 0.75rem;
+}
+
+.pg-card-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.pg-card-feature {
+  background-color: #f3f4f6;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+
+/* Modal Styling */
+.pg-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.pg-modal {
+  background-color: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+.pg-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.pg-modal-close:hover {
+  background-color: #f3f4f6;
+}
+
+.pg-modal-image-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.pg-modal-main-image {
+  grid-column: span 3;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.pg-modal-thumbnail {
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.pg-modal-thumbnail:hover {
+  opacity: 0.8;
+}
+
+.pg-modal-content {
+  padding: 1.5rem 2rem 2rem;
+}
+
+.pg-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.pg-modal-address {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.pg-modal-address svg {
+  margin-right: 0.5rem;
+  color: #6366f1;
+}
+
+.pg-modal-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.pg-modal-detail-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.pg-modal-detail-label {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+}
+
+.pg-modal-detail-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.pg-modal-amenities {
+  margin-bottom: 2rem;
+}
+
+.pg-modal-section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.pg-modal-amenities-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.pg-modal-amenity {
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.pg-modal-amenity svg {
+  margin-right: 0.5rem;
+  color: #6366f1;
+}
+
+.pg-modal-description {
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+.pg-modal-contact {
+  background-color: #f3f4f6;
+  padding: 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.pg-modal-contact-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.pg-modal-contact-name {
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.pg-modal-contact-phone {
+  color: #6b7280;
+}
+
+.pg-modal-contact-button {
+  padding: 0.75rem 1.5rem;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pg-modal-contact-button:hover {
+  background-color: #4338ca;
+}
+
+/* Loading State */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+  color: #6366f1;
+  font-weight: 500;
+}
+
+/* No Results State */
+.no-results {
+  grid-column: 1 / -1;
+  background-color: white;
+  border-radius: 12px;
+  padding: 3rem;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.no-results p {
+  font-size: 1.1rem;
+  color: #4b5563;
+  margin-bottom: 1.5rem;
+}
+
+.no-results button {
+  padding: 0.75rem 1.5rem;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.no-results button:hover {
+  background-color: #4338ca;
+}
+
+/* Responsive Styling */
+@media (max-width: 900px) {
+  .pg-content {
+    grid-template-columns: 1fr;
+  }
+  
+  .filter-section {
+    position: static;
+    margin-bottom: 2rem;
+  }
+  
+  .pg-listings {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}

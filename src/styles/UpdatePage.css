@@ -1,0 +1,150 @@
+.update-container {
+  padding: 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.update-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.update-header h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  background: linear-gradient(90deg, #007bff, #6610f2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.5px;
+}
+
+.update-header h1 span {
+  color: #007bff;
+  font-weight: 800;
+}
+
+.update-header p {
+  color: #6c757d;
+  font-size: 16px;
+}
+
+.search-container {
+  margin: 0 auto 30px;
+  position: relative;
+  max-width: 600px;
+  transition: all 0.3s ease;
+}
+
+.search-container.active {
+  transform: scale(1.02);
+}
+
+.search-input-top {
+  width: 100%;
+  padding: 15px 20px 15px 50px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.1);
+  transition: all 0.3s ease;
+  background-color: white;
+}
+
+.search-input-top:focus {
+  box-shadow: 0 8px 25px rgba(0, 123, 255, 0.15);
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #adb5bd;
+  pointer-events: none;
+}
+
+.updates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  padding-bottom: 80px;
+}
+
+.create-post-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.create-post-button:hover {
+  transform: scale(1.05) rotate(90deg);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+}
+
+/* Animation for cards */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* You'll need to add this to your UpdateCard component's CSS */
+.update-card {
+  animation: fadeIn 0.5s ease forwards;
+  width: 100%;
+  max-width: 700px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.update-card:hover {
+  transform: translateY(5rem);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.524);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .update-header h1 {
+    font-size: 26px;
+  }
+  
+  .create-post-button {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .search-input-top {
+    padding: 12px 15px 12px 40px;
+  }
+}

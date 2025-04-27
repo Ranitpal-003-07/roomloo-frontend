@@ -1,0 +1,25 @@
+.pg-card {
+    display: flex;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: white;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+    overflow: hidden;
+  }
+  
+  .pg-card:hover {
+    transform: translateY(-3px);
+  }
+  
+  .pg-image {
+    width: 150px;
+    height: 120px;
+    object-fit: cover;
+  }
+  
+  .pg-info {
+    padding: 10px;
+  }
+  

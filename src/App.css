@@ -1,0 +1,37 @@
+/* App.css */
+/* Hide scrollbars for all elements */
+* {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+/* Existing styles */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow: -moz-scrollbars-none; /* Old Firefox */
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  margin-top: 60px;
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.content::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+.footer {
+  text-align: center;
+  padding: 10px;
+  background: black;
+  color: white;
+}

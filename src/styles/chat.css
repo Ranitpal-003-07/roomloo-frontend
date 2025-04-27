@@ -1,0 +1,157 @@
+/* chat.css */
+.chat-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.chat-body {
+  position: absolute;
+  bottom: 50px;
+  right: 0;
+  width: 450px;
+  height: 600px;
+  border-radius: 15px;
+  background-color: #f0f5ff; /* Pastel blue background */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: bottom right;
+  transform: scale(0);
+  opacity: 0;
+  visibility: hidden;
+  border: 1px solid #d8e1f5; /* Pastel border */
+}
+
+.chat-container.open .chat-body {
+  transform: scale(1);
+  opacity: 1;
+  visibility: visible;
+}
+
+.chat-sidebar {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background-color: #f8faff; /* Light pastel blue */
+}
+
+/* Add these styles to hide scrollbars */
+.chat-sidebar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.chat-sidebar::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+/* Existing styles remain the same */
+.chat-sidebar {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background-color: #f8faff;
+}
+
+/* Rest of your existing CSS... */
+
+.chat-sidebar h2 {
+  padding: 20px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #5a7baa; /* Soft blue */
+  background-color: #e3ebfd; /* Pastel header background */
+  border-bottom: 2px solid #d3def7;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.chat-disclaimer {
+  padding: 15px;
+  margin: 10px;
+  background-color: #fff4e6; /* Pastel orange */
+  border-radius: 8px;
+  color: #8b6d4b;
+  font-size: 13px;
+  line-height: 1.4;
+  border: 1px solid #ffe4c4;
+}
+
+.chat-toggle {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #6C8EBF; /* Soft pastel blue */
+  color: white;
+  border: none;
+  box-shadow: 0 4px 15px rgba(108, 142, 191, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.chat-toggle:hover {
+  background-color: #5B7DAF;
+  transform: scale(1.08);
+}
+
+.chat-card {
+  display: flex;
+  padding: 18px;
+  margin: 10px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: 1px solid #e1e8f4;
+}
+
+.chat-card:hover {
+  background-color: #f8f9ff;
+  transform: translateX(5px);
+  box-shadow: 0 3px 10px rgba(108, 142, 191, 0.1);
+}
+
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .chat-body {
+    width: 90vw;
+    height: 70vh;
+    bottom: 75px;
+    right: 20px;
+  }
+  
+  .chat-toggle {
+    width: 55px;
+    height: 55px;
+    right: 5vw;
+  }
+}
+
+/* Animation */
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.chat-card {
+  animation: slideIn 0.3s ease forwards;
+}
