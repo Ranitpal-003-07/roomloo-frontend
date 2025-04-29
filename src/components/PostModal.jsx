@@ -7,8 +7,7 @@ import { storage, db } from "../firebase"; // Removed unused auth import
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
-
+import axios from "axios"; // Import axios for HTTP requests
 
 const PostModal = ({ onClose, onSave }) => {
   const [description, setDescription] = useState("");
@@ -94,7 +93,6 @@ const PostModal = ({ onClose, onSave }) => {
     }
   };
   
-  
 
   const sendPostToLaravel = async (postData) => {
     try {
@@ -104,7 +102,6 @@ const PostModal = ({ onClose, onSave }) => {
       console.error("Error sending post to Laravel:", error.response?.data || error.message);
     }
   };
-  
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';

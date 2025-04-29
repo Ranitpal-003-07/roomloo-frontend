@@ -82,7 +82,7 @@
 .create-post-button {
   position: fixed;
   bottom: 30px;
-  right: 30px;
+  left: 30px;
   width: 60px;
   height: 60px;
   background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);

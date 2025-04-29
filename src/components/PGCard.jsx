@@ -5,12 +5,12 @@ const PGCard = ({ pg, onClick }) => {
   // Format price with rupee symbol
   const formatPrice = (price) => {
     if (!price) return "Price not available";
-    
+   
     // If price is already formatted with ₹, return as is
     if (typeof price === 'string' && price.includes('₹')) return price;
-    
+   
     // Otherwise format it
-    return `₹${price.toLocaleString('en-IN')}/month`;
+    return `₹${parseFloat(price).toLocaleString('en-IN')}/month`;
   };
 
   // Get first image or placeholder
@@ -20,8 +20,9 @@ const PGCard = ({ pg, onClick }) => {
 
   // Generate amenity icons
   const getAmenityIcons = (amenities) => {
-    if (!amenities || !Array.isArray(amenities)) return "";
-    
+    if (!amenities || !Array.isArray(amenities) || amenities.length === 0)
+      return null;
+   
     const amenityIcons = {
       "WiFi": "📶",
       "AC": "❄️",
@@ -40,39 +41,42 @@ const PGCard = ({ pg, onClick }) => {
       "Swimming Pool": "🏊",
       "Elevator": "🛗"
     };
-    
-    return amenities.slice(0, 4).map(amenity => 
-      <span key={amenity} className="amenity-icon" title={amenity}>
-        {amenityIcons[amenity] || '✓'} 
+   
+    return amenities.slice(0, 4).map(amenity => (
+      <span key={amenity} className="pg1-amenity-icon" title={amenity}>
+        {amenityIcons[amenity] || '✓'}
       </span>
-    );
+    ));
   };
 
   // Room type display
-  const roomTypeDisplay = pg.roomType === 'Sharing' && pg.sharingType 
-    ? pg.sharingType 
+  const roomTypeDisplay = pg.roomType === 'Sharing' && pg.sharingType
+    ? pg.sharingType
     : pg.roomType || "Single";
 
   return (
-    <div className="pg-card" onClick={() => onClick(pg)}>
-      <div className="pg-image">
-        <img src={cardImage} alt={pg.title || "PG"} />
+    <div className="pg1-card" onClick={() => onClick(pg)}>
+      <div className="pg1-image-container">
+        <img src={cardImage} alt={pg.title || "PG"} className="pg1-image" />
+        <div className="pg1-badge">{roomTypeDisplay}</div>
       </div>
-      <div className="pg-info">
-        <h3>{pg.title || "Unnamed PG"}</h3>
-        <p className="pg-location">{pg.location || "Location not specified"}</p>
-        <p className="pg-price">{formatPrice(pg.price)}</p>
-        <div className="pg-details">
-          <span className="room-type">{roomTypeDisplay}</span>
-          <div className="amenities-preview">
-            {getAmenityIcons(pg.amenities)}
-            {pg.amenities && pg.amenities.length > 4 && 
-              <span className="more-amenities">+{pg.amenities.length - 4}</span>
-            }
-          </div>
+      <div className="pg1-info">
+        <h3 className="pg1-title">{pg.title || "Unnamed PG"}</h3>
+        <p className="pg1-location">
+          <span className="pg1-location-icon">📍</span>
+          {pg.location || "Location not specified"}
+        </p>
+        <div className="pg1-amenities">
+          {getAmenityIcons(pg.amenities)}
+          {pg.amenities && pg.amenities.length > 4 &&
+            <span className="pg1-more-amenities">+{pg.amenities.length - 4}</span>
+          }
+        </div>
+        <div className="pg1-footer">
+          <p className="pg1-price">{formatPrice(pg.price)}</p>
+          <button className="pg1-view-details-button">Details</button>
         </div>
       </div>
-      <div className="view-details-button">View Details</div>
     </div>
   );
 };

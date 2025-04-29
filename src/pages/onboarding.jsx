@@ -37,10 +37,12 @@ import axios from "axios";
 const Onboarding = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-
+  
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 6; // Updated total steps
 
+ 
+  
   const [formData, setFormData] = useState({
     fullName: "",
     age: "",
@@ -48,7 +50,7 @@ const Onboarding = () => {
     hometown: "",
     currentAddress: "",
     collegeName: "",
-    profileImageUrl:user?.profileImageUrl || "default-image-url.jpg",
+    profileImageUrl:"", 
     socialLinks: {
       instagram: "",
       facebook: "",
@@ -56,11 +58,13 @@ const Onboarding = () => {
       twitter: "",
       linkedin: ""
     },
+    // New lifestyle fields
     foodPreference: "",
     smokingHabit: "",
     alcoholConsumption: "",
     religion: "",
     fieldOfStudy: "",
+    // Existing fields
     roomPreference: "",
     about: "",
     hobbies: [""],
@@ -69,7 +73,7 @@ const Onboarding = () => {
     favoriteFoods: [""],
     currentHostel: ""
   });
-
+  
   // Handle array field additions and removals
   const addArrayItem = (field) => {
     setFormData(prev => ({
@@ -77,14 +81,14 @@ const Onboarding = () => {
       [field]: [...prev[field], ""]
     }));
   };
-
+  
   const removeArrayItem = (field, index) => {
     setFormData(prev => ({
       ...prev,
       [field]: prev[field].filter((_, i) => i !== index)
     }));
   };
-
+  
   // Handle changes for array fields
   const handleArrayChange = (field, index, value) => {
     setFormData(prev => {
@@ -96,7 +100,7 @@ const Onboarding = () => {
       };
     });
   };
-
+  
   // Handle changes for social links
   const handleSocialChange = (platform, value) => {
     setFormData(prev => ({
@@ -107,13 +111,13 @@ const Onboarding = () => {
       }
     }));
   };
-
+  
   // Handle regular field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
-
+  
   // Navigate between steps
   const nextStep = () => {
     if (currentStep < totalSteps) {
@@ -121,14 +125,14 @@ const Onboarding = () => {
       window.scrollTo(0, 0);
     }
   };
-
+  
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
       window.scrollTo(0, 0);
     }
   };
-
+  
   // Final submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -172,6 +176,7 @@ const Onboarding = () => {
       console.error(err);
     }
   };
+  
   
   // Progress calculation
   const progress = (currentStep / totalSteps) * 100;

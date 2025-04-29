@@ -12,13 +12,15 @@ import {
   faGlobe,
   faSave,
   faTimesCircle,
-  faCamera
+  faCamera,
+  faExclamationTriangle
 } from '@fortawesome/free-solid-svg-icons';
 import { 
   faLinkedinIn, 
   faGithub, 
   faInstagram, 
-  faTwitter 
+  faTwitter,
+  faFacebook
 } from '@fortawesome/free-brands-svg-icons';
 import '../styles/Profile.css';
 
@@ -28,6 +30,15 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
+// Error alert component
+const ErrorAlert = ({ message, onClose }) => (
+  <div className="error-alert">
+    <FontAwesomeIcon icon={faExclamationTriangle} />
+    <span>{message}</span>
+    <button onClick={onClose}><FontAwesomeIcon icon={faTimes} /></button>
+  </div>
+);
+
 const Profile = () => {
   // Add profile image state
   const [profileImage, setProfileImage] = useState(null);
@@ -36,22 +47,26 @@ const Profile = () => {
   const [coverImageUrl, setCoverImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
 
+  // Error handling state
+  const [error, setError] = useState(null);
+
   // User profile data state with default values aligned with Firestore structure
   const [userData, setUserData] = useState({
-    fullName: "John Doe",
-    pronouns: "(He/Him)",
-    age: "25",
-    gender: "male",
-    hometown: "Bangalore, India",
-    collegeName: "National Institute of Technology",
-    about: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. A short intro about the user can go here.",
-    roomPreference: "female",
+    fullName: "",
+    pronouns: "",
+    age: "",
+    gender: "",
+    hometown: "",
+    collegeName: "",
+    about: "",
+    roomPreference: "",
     hobbies: [],
     interests: [],
-    currentAddress: "221B Baker Street, London, United Kingdom",
+    currentAddress: "",
     heartWays: [],
     favoriteFoods: [],
-    currentHostel: "Hostel Phoenix",
+    currentHostel: "",
+    foodPreference: "",
     socialLinks: {
       linkedin: "",
       github: "",
@@ -59,12 +74,13 @@ const Profile = () => {
       twitter: "",
       facebook: ""
     },
-    smokingHabit: "Non-smoker",
-    alcoholConsumption: "Social drinker",
-    religion: "Prefer not to say",
-    fieldOfStudy: "Computer Science",
-    profileImageUrl: "", // Add a field for profile image URL
-    coverImageUrl: "", // Add a field for cover image URL
+    smokingHabit: "",
+    alcoholConsumption: "",
+    religion: "",
+    fieldOfStudy: "",
+    profileImageUrl: "",
+    coverImageUrl: "",
+    onboardingComplete: false
   });
 
   // Loading state
@@ -88,43 +104,86 @@ const Profile = () => {
   const [editingReligion, setEditingReligion] = useState(false);
   const [editingFieldOfStudy, setEditingFieldOfStudy] = useState(false);
   const [editingSocialLinks, setEditingSocialLinks] = useState(false);
+  const [editingFoodPreference, setEditingFoodPreference] = useState(false);
  
   // Temporary states for editing
-  const [tempName, setTempName] = useState(userData.fullName);
-  const [tempPronouns, setTempPronouns] = useState(userData.pronouns);
-  const [tempAbout, setTempAbout] = useState(userData.about);
-  const [tempPreference, setTempPreference] = useState(userData.roomPreference);
-  const [tempAddress, setTempAddress] = useState(userData.currentAddress);
-  const [tempAge, setTempAge] = useState(userData.age);
-  const [tempGender, setTempGender] = useState(userData.gender);
-  const [tempLocation, setTempLocation] = useState(userData.hometown);
-  const [tempCollege, setTempCollege] = useState(userData.collegeName);
-  const [tempHostel, setTempHostel] = useState(userData.currentHostel);
-  const [tempSmoking, setTempSmoking] = useState(userData.smokingHabit);
-  const [tempAlcohol, setTempAlcohol] = useState(userData.alcoholConsumption);
-  const [tempReligion, setTempReligion] = useState(userData.religion);
-  const [tempFieldOfStudy, setTempFieldOfStudy] = useState(userData.fieldOfStudy);
+  const [tempName, setTempName] = useState('');
+  const [tempPronouns, setTempPronouns] = useState('');
+  const [tempAbout, setTempAbout] = useState('');
+  const [tempPreference, setTempPreference] = useState('');
+  const [tempAddress, setTempAddress] = useState('');
+  const [tempAge, setTempAge] = useState('');
+  const [tempGender, setTempGender] = useState('');
+  const [tempLocation, setTempLocation] = useState('');
+  const [tempCollege, setTempCollege] = useState('');
+  const [tempHostel, setTempHostel] = useState('');
+  const [tempSmoking, setTempSmoking] = useState('');
+  const [tempAlcohol, setTempAlcohol] = useState('');
+  const [tempReligion, setTempReligion] = useState('');
+  const [tempFieldOfStudy, setTempFieldOfStudy] = useState('');
+  const [tempFoodPreference, setTempFoodPreference] = useState('');
   const [tempSocialLinks, setTempSocialLinks] = useState({
-    linkedin: userData.socialLinks?.linkedin || "",
-    github: userData.socialLinks?.github || "",
-    instagram: userData.socialLinks?.instagram || "",
-    twitter: userData.socialLinks?.twitter || "",
-    facebook: userData.socialLinks?.facebook || ""
+    linkedin: "",
+    github: "",
+    instagram: "",
+    twitter: "",
+    facebook: ""
   });
 
-  // Profile image upload handling
+  // States for new items
+  const [newHobby, setNewHobby] = useState('');
+  const [newInterest, setNewInterest] = useState('');
+  const [newFood, setNewFood] = useState('');
+  const [newHeartTrait, setNewHeartTrait] = useState('');
+  const [addingHobby, setAddingHobby] = useState(false);
+  const [addingInterest, setAddingInterest] = useState(false);
+  const [addingFood, setAddingFood] = useState(false);
+  const [addingHeartTrait, setAddingHeartTrait] = useState(false);
+
+  // Function to handle errors
+  const handleError = (errorMessage, consoleError = null) => {
+    setError(errorMessage);
+    if (consoleError) {
+      console.error(consoleError);
+    }
+    // Auto-dismiss error after 5 seconds
+    setTimeout(() => {
+      setError(null);
+    }, 5000);
+  };
+
+  // Clear error manually
+  const clearError = () => {
+    setError(null);
+  };
+
+  // Profile image upload handling with error handling
   const handleProfileImageChange = (e) => {
-    if (e.target.files[0]) {
-      setProfileImage(e.target.files[0]);
-      handleImageUpload(e.target.files[0], 'profile');
+    const file = e.target.files[0];
+    if (file) {
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        handleError("Profile image size should be less than 5MB");
+        return;
+      }
+      
+      setProfileImage(file);
+      handleImageUpload(file, 'profile');
     }
   };
 
-  // Cover image upload handling
+  // Cover image upload handling with error handling
   const handleCoverImageChange = (e) => {
-    if (e.target.files[0]) {
-      setCoverImage(e.target.files[0]);
-      handleImageUpload(e.target.files[0], 'cover');
+    const file = e.target.files[0];
+    if (file) {
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        handleError("Cover image size should be less than 5MB");
+        return;
+      }
+      
+      setCoverImage(file);
+      handleImageUpload(file, 'cover');
     }
   };
 
@@ -135,8 +194,15 @@ const Profile = () => {
         // Create a reference to the storage location
         const storageRef = ref(storage, `${type}Images/${userId}`);
         
-        // Upload the file
-        await uploadBytes(storageRef, image);
+        // Upload the file with metadata for CORS
+        const metadata = {
+          contentType: image.type,
+          customMetadata: {
+            'Access-Control-Allow-Origin': '*'
+          }
+        };
+        
+        await uploadBytes(storageRef, image, metadata);
         
         // Get the download URL
         const url = await getDownloadURL(storageRef);
@@ -165,11 +231,8 @@ const Profile = () => {
           setUserData(updatedData);
           await updateUserProfile({ coverImageUrl: url });
         }
-        
-        alert(`${type.charAt(0).toUpperCase() + type.slice(1)} image updated successfully!`);
       } catch (error) {
-        console.error(`Error uploading ${type} image:`, error);
-        alert(`Failed to upload ${type} image. Please try again.`);
+        handleError(`Failed to upload ${type} image. Please try again.`, error);
       } finally {
         setUploading(false);
         if (type === 'profile') {
@@ -181,16 +244,47 @@ const Profile = () => {
     }
   };
 
-  // Add this handler function for editing social links
+  // Add this handler function for editing social links with error handling
   const handleSaveSocialLinks = () => {
-    const updatedData = {
-      ...userData,
-      socialLinks: tempSocialLinks
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ socialLinks: tempSocialLinks });
-    setEditingSocialLinks(false);
+    try {
+      // Validate URLs if they are not empty
+      const validateUrl = (url) => {
+        if (url && url.trim() !== "") {
+          try {
+            // Add http:// prefix if not present
+            let formattedUrl = url;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+              formattedUrl = 'https://' + url;
+            }
+            new URL(formattedUrl);
+            return formattedUrl;
+          } catch {
+            throw new Error(`Invalid URL: ${url}`);
+          }
+        }
+        return url;
+      };
+
+      // Create a validated version of social links
+      const validatedLinks = {
+        linkedin: validateUrl(tempSocialLinks.linkedin),
+        github: validateUrl(tempSocialLinks.github),
+        instagram: validateUrl(tempSocialLinks.instagram),
+        twitter: validateUrl(tempSocialLinks.twitter),
+        facebook: validateUrl(tempSocialLinks.facebook)
+      };
+
+      const updatedData = {
+        ...userData,
+        socialLinks: validatedLinks
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ socialLinks: validatedLinks });
+      setEditingSocialLinks(false);
+    } catch (error) {
+      handleError(error.message);
+    }
   };
 
   // Add a function to handle social link changes
@@ -201,27 +295,21 @@ const Profile = () => {
     });
   };
 
-  // Add function to open social links in new tab
+  // Add function to open social links in new tab with error handling
   const openSocialLink = (url) => {
     if (url && url.trim() !== "") {
-      // Add http:// prefix if not present
-      let formattedUrl = url;
-      if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        formattedUrl = 'https://' + url;
+      try {
+        // Add http:// prefix if not present
+        let formattedUrl = url;
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+          formattedUrl = 'https://' + url;
+        }
+        window.open(formattedUrl, '_blank', 'noopener,noreferrer');
+      } catch (error) {
+        handleError("Failed to open link. URL may be invalid.");
       }
-      window.open(formattedUrl, '_blank');
     }
   };
-  
-  // States for new items
-  const [newHobby, setNewHobby] = useState('');
-  const [newInterest, setNewInterest] = useState('');
-  const [newFood, setNewFood] = useState('');
-  const [newHeartTrait, setNewHeartTrait] = useState('');
-  const [addingHobby, setAddingHobby] = useState(false);
-  const [addingInterest, setAddingInterest] = useState(false);
-  const [addingFood, setAddingFood] = useState(false);
-  const [addingHeartTrait, setAddingHeartTrait] = useState(false);
 
   // Fetch user data from Firebase when component mounts
   useEffect(() => {
@@ -232,7 +320,7 @@ const Profile = () => {
       } else {
         // No user is signed in
         setLoading(false);
-        console.log("No user signed in");
+        handleError("No user signed in. Please log in to view your profile.");
         // You may want to redirect to login page here
       }
     });
@@ -240,7 +328,7 @@ const Profile = () => {
     return () => unsubscribe(); // Cleanup subscription
   }, []);
 
-  // Fetch user profile from Firestore
+  // Fetch user profile from Firestore with error handling
   const fetchUserProfile = async (uid) => {
     try {
       const userDocRef = doc(db, "users", uid);
@@ -253,23 +341,24 @@ const Profile = () => {
         setActiveStatus(data.status || 'Needs Roommate');
         
         // Set profile image URL if exists
-        if (data.profileImageUrl) {
-          setImageUrl(data.profileImageUrl);
-        } else {
-          // Try to fetch profile image if it exists in storage but not in profile
-          try {
-            const storageRef = ref(storage, `profileImages/${uid}`);
-            const url = await getDownloadURL(storageRef);
-            setImageUrl(url);
-            
-            // Update profile with the image URL
-            await updateDoc(userDocRef, { profileImageUrl: url });
-          } catch (err) {
-            // No image exists yet, which is fine
-            console.log("No profile image found");
-          }
+      if (data.profileImageUrl) {
+        setImageUrl(data.profileImageUrl);
+      } else {
+        // Try to fetch profile image if it exists in storage but not in profile
+        try {
+          const storageRef = ref(storage, `profileImages/${uid}`);
+          const url = await getDownloadURL(storageRef);
+          setImageUrl(url);
+          
+          // Update profile with the image URL
+          await updateDoc(userDocRef, { profileImageUrl: url });
+        } catch (err) {
+          // No image exists in storage, use default image from public assets
+          console.log("No profile image found, using default");
+          setImageUrl("/assets/usr1.jpg");
         }
-        
+      }
+              
         // Set cover image URL if exists
         if (data.coverImageUrl) {
           setCoverImageUrl(data.coverImageUrl);
@@ -299,10 +388,11 @@ const Profile = () => {
         setTempLocation(data.hometown || '');
         setTempCollege(data.collegeName || '');
         setTempHostel(data.currentHostel || '');
-        setTempSmoking(data.smokingHabit || 'Non-smoker');
-        setTempAlcohol(data.alcoholConsumption || 'Social drinker');
-        setTempReligion(data.religion || 'Prefer not to say');
-        setTempFieldOfStudy(data.fieldOfStudy || 'Computer Science');
+        setTempSmoking(data.smokingHabit || '');
+        setTempAlcohol(data.alcoholConsumption || '');
+        setTempReligion(data.religion || '');
+        setTempFieldOfStudy(data.fieldOfStudy || '');
+        setTempFoodPreference(data.foodPreference || '');
         setTempSocialLinks(data.socialLinks || {
           linkedin: "",
           github: "",
@@ -313,168 +403,288 @@ const Profile = () => {
       
       } else {
         // Create a new user profile if it doesn't exist
-        await setDoc(userDocRef, { 
-          ...userData, 
-          status: activeStatus,
+        const defaultUserData = {
+          fullName: "",
+          pronouns: "",
+          age: "",
+          gender: "",
+          hometown: "",
+          collegeName: "",
+          about: "",
+          roomPreference: "",
+          hobbies: [],
+          interests: [],
+          currentAddress: "",
+          heartWays: [],
+          favoriteFoods: [],
+          currentHostel: "",
+          foodPreference: "",
+          socialLinks: {
+            linkedin: "",
+            github: "",
+            instagram: "",
+            twitter: "",
+            facebook: ""
+          },
+          smokingHabit: "",
+          alcoholConsumption: "",
+          religion: "",
+          fieldOfStudy: "",
+          profileImageUrl: "",
+          coverImageUrl: "",
+          status: 'Needs Roommate',
           createdAt: new Date(),
-          email: auth.currentUser.email
-        });
+          email: auth.currentUser.email,
+          onboardingComplete: false
+        };
+        
+        await setDoc(userDocRef, defaultUserData);
+        setUserData(defaultUserData);
       }
     } catch (error) {
-      console.error("Error fetching user profile:", error);
+      handleError("Error fetching user profile. Please refresh the page.", error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Update user profile in Firestore
+  // Update user profile in Firestore with error handling
   const updateUserProfile = async (updatedData) => {
-    if (!userId) return;
+    if (!userId) {
+      handleError("User not authenticated. Please log in again.");
+      return;
+    }
     
     try {
       const userDocRef = doc(db, "users", userId);
       await updateDoc(userDocRef, updatedData);
       console.log("Profile updated successfully");
     } catch (error) {
-      console.error("Error updating profile:", error);
+      handleError("Error updating profile. Please try again.", error);
+      // Revert local state to previous values if update fails
+      if (error) {
+        fetchUserProfile(userId);
+      }
     }
   };
 
-  // Handler functions for editing operations with Firebase updates
+  // Handler for food preference
+  const handleSaveFoodPreference = () => {
+    try {
+      const updatedData = {
+        ...userData,
+        foodPreference: tempFoodPreference
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ foodPreference: tempFoodPreference });
+      setEditingFoodPreference(false);
+    } catch (error) {
+      handleError("Failed to update food preference.", error);
+    }
+  };
+
+  // Handler functions for editing operations with Firebase updates and error handling
   const handleSaveName = () => {
-    const updatedData = {
-      ...userData,
-      fullName: tempName,
-      pronouns: tempPronouns
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ fullName: tempName, pronouns: tempPronouns });
-    setEditingName(false);
+    try {
+      if (!tempName.trim()) {
+        throw new Error("Name cannot be empty");
+      }
+      
+      const updatedData = {
+        ...userData,
+        fullName: tempName,
+        pronouns: tempPronouns
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ fullName: tempName, pronouns: tempPronouns });
+      setEditingName(false);
+    } catch (error) {
+      handleError(error.message);
+    }
   };
 
   const handleSaveBasicInfo = () => {
-    const updatedData = {
-      ...userData,
-      age: tempAge,
-      gender: tempGender,
-      hometown: tempLocation
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ age: tempAge, gender: tempGender, hometown: tempLocation });
-    setEditingBasicInfo(false);
+    try {
+      // Validate age if provided (must be a number)
+      if (tempAge && isNaN(parseInt(tempAge))) {
+        throw new Error("Age must be a number");
+      }
+      
+      const updatedData = {
+        ...userData,
+        age: tempAge,
+        gender: tempGender,
+        hometown: tempLocation
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ age: tempAge, gender: tempGender, hometown: tempLocation });
+      setEditingBasicInfo(false);
+    } catch (error) {
+      handleError(error.message);
+    }
   };
 
-  // Add these handler functions for editing operations
+  // Add these handler functions for editing operations with error handling
   const handleSaveSmoking = () => {
-    const updatedData = {
-      ...userData,
-      smokingHabit: tempSmoking
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ smokingHabit: tempSmoking });
-    setEditingSmoking(false);
+    try {
+      const updatedData = {
+        ...userData,
+        smokingHabit: tempSmoking
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ smokingHabit: tempSmoking });
+      setEditingSmoking(false);
+    } catch (error) {
+      handleError("Failed to update smoking habit.", error);
+    }
   };
 
   const handleSaveAlcohol = () => {
-    const updatedData = {
-      ...userData,
-      alcoholConsumption: tempAlcohol
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ alcoholConsumption: tempAlcohol });
-    setEditingAlcohol(false);
+    try {
+      const updatedData = {
+        ...userData,
+        alcoholConsumption: tempAlcohol
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ alcoholConsumption: tempAlcohol });
+      setEditingAlcohol(false);
+    } catch (error) {
+      handleError("Failed to update alcohol consumption.", error);
+    }
   };
 
   const handleSaveReligion = () => {
-    const updatedData = {
-      ...userData,
-      religion: tempReligion
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ religion: tempReligion });
-    setEditingReligion(false);
+    try {
+      const updatedData = {
+        ...userData,
+        religion: tempReligion
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ religion: tempReligion });
+      setEditingReligion(false);
+    } catch (error) {
+      handleError("Failed to update religion.", error);
+    }
   };
 
   const handleSaveFieldOfStudy = () => {
-    const updatedData = {
-      ...userData,
-      fieldOfStudy: tempFieldOfStudy
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ fieldOfStudy: tempFieldOfStudy });
-    setEditingFieldOfStudy(false);
+    try {
+      const updatedData = {
+        ...userData,
+        fieldOfStudy: tempFieldOfStudy
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ fieldOfStudy: tempFieldOfStudy });
+      setEditingFieldOfStudy(false);
+    } catch (error) {
+      handleError("Failed to update field of study.", error);
+    }
   };
 
   const handleSaveCollege = () => {
-    const updatedData = {
-      ...userData,
-      collegeName: tempCollege
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ collegeName: tempCollege });
-    setEditingCollege(false);
+    try {
+      const updatedData = {
+        ...userData,
+        collegeName: tempCollege
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ collegeName: tempCollege });
+      setEditingCollege(false);
+    } catch (error) {
+      handleError("Failed to update college name.", error);
+    }
   };
 
   const handleSaveAbout = () => {
-    const updatedData = {
-      ...userData,
-      about: tempAbout
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ about: tempAbout });
-    setEditingAbout(false);
+    try {
+      const updatedData = {
+        ...userData,
+        about: tempAbout
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ about: tempAbout });
+      setEditingAbout(false);
+    } catch (error) {
+      handleError("Failed to update about section.", error);
+    }
   };
 
   const handleSavePreference = () => {
-    const updatedData = {
-      ...userData,
-      roomPreference: tempPreference
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ roomPreference: tempPreference });
-    setEditingPreference(false);
+    try {
+      const updatedData = {
+        ...userData,
+        roomPreference: tempPreference
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ roomPreference: tempPreference });
+      setEditingPreference(false);
+    } catch (error) {
+      handleError("Failed to update room preference.", error);
+    }
   };
 
   const handleSaveAddress = () => {
-    const updatedData = {
-      ...userData,
-      currentAddress: tempAddress
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ currentAddress: tempAddress });
-    setEditingAddress(false);
+    try {
+      const updatedData = {
+        ...userData,
+        currentAddress: tempAddress
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ currentAddress: tempAddress });
+      setEditingAddress(false);
+    } catch (error) {
+      handleError("Failed to update address.", error);
+    }
   };
 
   const handleSaveHostel = () => {
-    const updatedData = {
-      ...userData,
-      currentHostel: tempHostel
-    };
-    
-    setUserData(updatedData);
-    updateUserProfile({ currentHostel: tempHostel });
-    setEditingHostel(false);
+    try {
+      const updatedData = {
+        ...userData,
+        currentHostel: tempHostel
+      };
+      
+      setUserData(updatedData);
+      updateUserProfile({ currentHostel: tempHostel });
+      setEditingHostel(false);
+    } catch (error) {
+      handleError("Failed to update hostel information.", error);
+    }
   };
 
-  // Update status and save to Firebase
+  // Update status and save to Firebase with error handling
   const handleStatusChange = (status) => {
-    setActiveStatus(status);
-    updateUserProfile({ status });
+    try {
+      setActiveStatus(status);
+      updateUserProfile({ status });
+    } catch (error) {
+      handleError("Failed to update status.", error);
+    }
   };
 
-  // Functions to add new items with Firebase updates
+  // Functions to add new items with Firebase updates and error handling
   const addHobby = () => {
-    if (newHobby.trim()) {
+    try {
+      if (!newHobby.trim()) {
+        throw new Error("Hobby cannot be empty");
+      }
+      
+      // Check if hobby already exists
+      if (userData.hobbies.includes(newHobby.trim())) {
+        throw new Error("This hobby already exists in your profile");
+      }
+      
       const updatedHobbies = [...userData.hobbies, newHobby.trim()];
       setUserData(prev => ({
         ...prev,
@@ -483,11 +693,22 @@ const Profile = () => {
       updateUserProfile({ hobbies: updatedHobbies });
       setNewHobby('');
       setAddingHobby(false);
+    } catch (error) {
+      handleError(error.message);
     }
   };
 
   const addInterest = () => {
-    if (newInterest.trim()) {
+    try {
+      if (!newInterest.trim()) {
+        throw new Error("Interest cannot be empty");
+      }
+      
+      // Check if interest already exists
+      if (userData.interests.includes(newInterest.trim())) {
+        throw new Error("This interest already exists in your profile");
+      }
+      
       const updatedInterests = [...userData.interests, newInterest.trim()];
       setUserData(prev => ({
         ...prev,
@@ -496,11 +717,22 @@ const Profile = () => {
       updateUserProfile({ interests: updatedInterests });
       setNewInterest('');
       setAddingInterest(false);
+    } catch (error) {
+      handleError(error.message);
     }
   };
 
   const addFood = () => {
-    if (newFood.trim()) {
+    try {
+      if (!newFood.trim()) {
+        throw new Error("Food cannot be empty");
+      }
+      
+      // Check if food already exists
+      if (userData.favoriteFoods.includes(newFood.trim())) {
+        throw new Error("This food already exists in your favorites");
+      }
+      
       const updatedFoods = [...userData.favoriteFoods, newFood.trim()];
       setUserData(prev => ({
         ...prev,
@@ -509,11 +741,22 @@ const Profile = () => {
       updateUserProfile({ favoriteFoods: updatedFoods });
       setNewFood('');
       setAddingFood(false);
+    } catch (error) {
+      handleError(error.message);
     }
   };
 
   const addHeartTrait = () => {
-    if (newHeartTrait.trim()) {
+    try {
+      if (!newHeartTrait.trim()) {
+        throw new Error("Heart trait cannot be empty");
+      }
+      
+      // Check if trait already exists
+      if (userData.heartWays.includes(newHeartTrait.trim())) {
+        throw new Error("This trait already exists in your profile");
+      }
+      
       const updatedHeartWays = [...userData.heartWays, newHeartTrait.trim()];
       setUserData(prev => ({
         ...prev,
@@ -522,46 +765,64 @@ const Profile = () => {
       updateUserProfile({ heartWays: updatedHeartWays });
       setNewHeartTrait('');
       setAddingHeartTrait(false);
+    } catch (error) {
+      handleError(error.message);
     }
   };
 
-  // Functions to remove items with Firebase updates
+  // Functions to remove items with Firebase updates and error handling
   const removeHobby = (hobbyToRemove) => {
-    const updatedHobbies = userData.hobbies.filter(hobby => hobby !== hobbyToRemove);
-    setUserData(prev => ({
-      ...prev,
-      hobbies: updatedHobbies
-    }));
-    updateUserProfile({ hobbies: updatedHobbies });
+    try {
+      const updatedHobbies = userData.hobbies.filter(hobby => hobby !== hobbyToRemove);
+      setUserData(prev => ({
+        ...prev,
+        hobbies: updatedHobbies
+      }));
+      updateUserProfile({ hobbies: updatedHobbies });
+    } catch (error) {
+      handleError("Failed to remove hobby.", error);
+    }
   };
 
   const removeInterest = (interestToRemove) => {
-    const updatedInterests = userData.interests.filter(interest => interest !== interestToRemove);
-    setUserData(prev => ({
-      ...prev,
-      interests: updatedInterests
-    }));
-    updateUserProfile({ interests: updatedInterests });
+    try {
+      const updatedInterests = userData.interests.filter(interest => interest !== interestToRemove);
+      setUserData(prev => ({
+        ...prev,
+        interests: updatedInterests
+      }));
+      updateUserProfile({ interests: updatedInterests });
+    } catch (error) {
+      handleError("Failed to remove interest.", error);
+    }
   };
 
   const removeFood = (foodToRemove) => {
-    const updatedFoods = userData.favoriteFoods.filter(food => food !== foodToRemove);
-    setUserData(prev => ({
-      ...prev,
-      favoriteFoods: updatedFoods
-    }));
-    updateUserProfile({ favoriteFoods: updatedFoods });
+    try {
+      const updatedFoods = userData.favoriteFoods.filter(food => food !== foodToRemove);
+      setUserData(prev => ({
+        ...prev,
+        favoriteFoods: updatedFoods
+      }));
+      updateUserProfile({ favoriteFoods: updatedFoods });
+    } catch (error) {
+      handleError("Failed to remove food.", error);
+    }
   };
 
   const removeHeartTrait = (traitToRemove) => {
-    const updatedHeartWays = userData.heartWays.filter(trait => trait !== traitToRemove);
-    setUserData(prev => ({
-      ...prev,
-      heartWays: updatedHeartWays
-    }));
-    updateUserProfile({ heartWays: updatedHeartWays });
+    try {
+      const updatedHeartWays = userData.heartWays.filter(trait => trait !== traitToRemove);
+      setUserData(prev => ({
+        ...prev,
+        heartWays: updatedHeartWays
+      }));
+      updateUserProfile({ heartWays: updatedHeartWays });
+    } catch (error) {
+      handleError("Failed to remove heart trait.", error);
+    }
   };
-  
+
   if (loading) {
     return <div className="pr-loading">Loading profile...</div>;
   }

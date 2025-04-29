@@ -27,7 +27,9 @@ function Navbar() {
   
   return (
     <nav className="navbar">
-      <div className="logo">Roomloo</div>
+      <div className="logo">
+        <img src="assets/main-logo.png" className="logo-main" alt="ROOMLOO" />
+      </div>
       {/* Normal Navbar (Visible on larger screens) */}
       <div className="nav-links-container">
         <div className="nav-links">

@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
 import "../styles/PGpage.css";
 import PGCard from "../components/PGCard";
 import PGDetailsModal from "../components/PGDetailsModal";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 
 const PGs = () => {
@@ -13,8 +14,11 @@ const PGs = () => {
   const [selectedPG, setSelectedPG] = useState(null);
   const [pgList, setPgList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [priceRange, setPriceRange] = useState({ min: 1000, max: 25000 });
-  const [currentPriceRange, setCurrentPriceRange] = useState(25000);
+  
+  // Set fixed price range from 0 to 40000
+  const [priceRange] = useState({ min: 0, max: 40000 });
+  const [currentPriceRange, setCurrentPriceRange] = useState(40000);
+  
   const [amenityFilters, setAmenityFilters] = useState({
     "WiFi": false,
     "AC": false,
@@ -51,30 +55,17 @@ const PGs = () => {
         }));
         
         setPgList(pgData);
-        console.log("Fetched PG Data:", pgData); // Debugging
         
-        // Extract unique locations (case-sensitive)
+        // Extract unique locations from fetched data
         const uniqueLocations = [...new Set(pgData.map(pg => pg.location).filter(Boolean))];
         setLocations(uniqueLocations);
         
-        // Extract unique colleges (case-sensitive)
+        // Extract unique colleges from fetched data
         const uniqueColleges = [...new Set(pgData
           .map(pg => pg.nearbyCollege)
           .filter(college => college && college.trim() !== '')
         )];
         setColleges(uniqueColleges);
-        
-        // Determine min and max price
-        if (pgData.length > 0) {
-          const prices = pgData.map(pg => {
-            const price = parseInt(pg.price, 10);
-            return isNaN(price) ? 0 : price;
-          });
-          const minPrice = Math.min(...prices);
-          const maxPrice = Math.max(...prices);
-          setPriceRange({ min: minPrice, max: maxPrice });
-          setCurrentPriceRange(maxPrice);
-        }
         
         setLoading(false);
       } catch (error) {
@@ -88,99 +79,75 @@ const PGs = () => {
 
   // Filter PGs based on search term and selected filters
   const filteredPGs = pgList.filter(pg => {
-    // Filter by search term (case-insensitive)
+    // Filter by search term
     const matchesSearch = 
       (pg.title?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      pg.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      pg.address?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+       pg.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+       pg.address?.toLowerCase().includes(searchTerm.toLowerCase())) ||
       searchTerm === "";
     
-    // Filter by location (case-insensitive)
+    // Filter by location
     const matchesLocation = selectedLocations.length === 0 || 
-      (pg.location && selectedLocations.some(loc => 
-        loc.toLowerCase() === pg.location.toLowerCase()
-      ));
+                          (pg.location && selectedLocations.includes(pg.location));
     
-    // Filter by college (case-insensitive)
+    // Filter by nearby college
     const matchesCollege = selectedColleges.length === 0 || 
-      (pg.nearbyCollege && selectedColleges.some(college => 
-        college.toLowerCase() === pg.nearbyCollege.toLowerCase()
-      ));
+                          (pg.nearbyCollege && selectedColleges.includes(pg.nearbyCollege));
     
-    // Filter by price
-    const pgPrice = parseInt(pg.price, 10) || 0;
+    // Filter by price - parse price safely
+    const pgPrice = parseInt(pg.price) || 0;
     const matchesPrice = pgPrice <= currentPriceRange;
     
     // Filter by room type
-    const getSharingCount = (sharingType) => {
-      if (!sharingType) return 0;
-      const match = sharingType.match(/\d+/);
-      return match ? parseInt(match[0], 10) : 0;
-    };
+    let matchesRoomType = true;
     
-    let matchesRoomType;
     if (roomCount === 1) {
       matchesRoomType = pg.roomType === 'Single';
-    } else {
-      if (pg.roomType === 'Sharing') {
-        const sharingCount = getSharingCount(pg.sharingType);
-        matchesRoomType = sharingCount === roomCount;
+    } else if (pg.roomType === 'Sharing') {
+      // Improved sharing type check
+      if (pg.sharingType) {
+        // Convert to string to ensure safe operations
+        const sharingTypeStr = String(pg.sharingType).trim();
+        matchesRoomType = 
+          sharingTypeStr === String(roomCount) || 
+          sharingTypeStr.startsWith(`${roomCount} `) || 
+          sharingTypeStr.includes(`(${roomCount})`) ||
+          sharingTypeStr.includes(`(${roomCount} `);
       } else {
         matchesRoomType = false;
       }
+    } else {
+      matchesRoomType = false;
     }
     
     // Filter by amenities
-    const hasAC = amenityFilters["AC"];
-    const hasNonAC = amenityFilters["Non-AC"];
-    let matchesAC = true;
+    const matchesAmenities = Object.keys(amenityFilters).every(amenity => {
+      // Only check amenities that are selected (true)
+      if (!amenityFilters[amenity]) return true;
+      
+      // Safely check if amenities exists and contains the amenity
+      return pg.amenities && 
+             Array.isArray(pg.amenities) && 
+             pg.amenities.includes(amenity);
+    });
     
-    // Handle AC/Non-AC conflict
-    if (hasAC && hasNonAC) {
-      matchesAC = false;
-    } else if (hasAC) {
-      matchesAC = pg.amenities?.includes("AC");
-    } else if (hasNonAC) {
-      matchesAC = !pg.amenities?.includes("AC");
-    }
-    
-    // Other amenities
-    const otherAmenities = Object.keys(amenityFilters).filter(
-      amenity => amenity !== "AC" && amenity !== "Non-AC"
-    );
-    const matchesOtherAmenities = otherAmenities.every(amenity => 
-      !amenityFilters[amenity] || pg.amenities?.includes(amenity)
-    );
-    
-    const matchesAmenities = matchesAC && matchesOtherAmenities;
-    
-    return (
-      matchesSearch &&
-      matchesLocation &&
-      matchesCollege &&
-      matchesPrice &&
-      matchesRoomType &&
-      matchesAmenities
-    );
+    return matchesSearch && matchesLocation && matchesCollege && 
+           matchesPrice && matchesRoomType && matchesAmenities;
   });
 
-  // Toggle selection for locations and colleges
   const toggleSelection = (value, setFunction, stateArray) => {
-    const newArray = stateArray.includes(value)
-      ? stateArray.filter(item => item !== value)
-      : [...stateArray, value];
-    setFunction(newArray);
+    if (stateArray.includes(value)) {
+      setFunction(stateArray.filter((item) => item !== value));
+    } else {
+      setFunction([...stateArray, value]);
+    }
   };
 
   const handleAmenityChange = (amenity) => {
-    // Handle AC/Non-AC mutual exclusivity
-    if (amenity === "AC" && amenityFilters["Non-AC"]) {
-      setAmenityFilters(prev => ({ ...prev, "Non-AC": false, [amenity]: !prev[amenity] }));
-    } else if (amenity === "Non-AC" && amenityFilters["AC"]) {
-      setAmenityFilters(prev => ({ ...prev, "AC": false, [amenity]: !prev[amenity] }));
-    } else {
-      setAmenityFilters(prev => ({ ...prev, [amenity]: !prev[amenity] }));
-    }
+    setAmenityFilters({
+      ...amenityFilters,
+      [amenity]: !amenityFilters[amenity]
+    });
   };
 
   const resetFilters = () => {
@@ -189,24 +156,12 @@ const PGs = () => {
     setSelectedColleges([]);
     setCurrentPriceRange(priceRange.max);
     setRoomCount(1);
-    setAmenityFilters({
-      "WiFi": false,
-      "AC": false,
-      "Non-AC": false,
-      "TV": false,
-      "Laundry": false,
-      "Parking": false,
-      "Mess/Food": false,
-      "Gym": false,
-      "Power Backup": false,
-      "24/7 Water": false,
-      "Security": false,
-      "Cleaning Service": false,
-      "Refrigerator": false,
-      "Washing Machine": false,
-      "Swimming Pool": false,
-      "Elevator": false
+    // Reset all amenity filters to false
+    const resetAmenities = {};
+    Object.keys(amenityFilters).forEach(key => {
+      resetAmenities[key] = false;
     });
+    setAmenityFilters(resetAmenities);
   };
 
   return (
@@ -236,20 +191,20 @@ const PGs = () => {
           {/* Live Map Placeholder */}
           <div className="map-placeholder">📍 Live Map Here</div>
 
-          {/* Price Slider */}
+          {/* Price Slider - now fixed from 0 to 40000 */}
           <div className="filter-group">
-            <h4>Price Range: ₹{currentPriceRange.toLocaleString()}</h4>
+            <h4>Price Range: ₹{currentPriceRange}</h4>
             <input 
               type="range" 
               min={priceRange.min} 
               max={priceRange.max} 
               value={currentPriceRange}
-              onChange={(e) => setCurrentPriceRange(parseInt(e.target.value, 10))}
+              onChange={(e) => setCurrentPriceRange(parseInt(e.target.value))}
               className="price-slider" 
             />
             <div className="price-range-labels">
-              <span>₹{priceRange.min.toLocaleString()}</span>
-              <span>₹{priceRange.max.toLocaleString()}</span>
+              <span>₹{priceRange.min}</span>
+              <span>₹{priceRange.max}</span>
             </div>
           </div>
 
@@ -262,10 +217,6 @@ const PGs = () => {
                   type="checkbox"
                   checked={isChecked}
                   onChange={() => handleAmenityChange(amenity)}
-                  disabled={
-                    (amenity === "AC" && isChecked && amenityFilters["Non-AC"]) ||
-                    (amenity === "Non-AC" && isChecked && amenityFilters["AC"])
-                  }
                 />{" "}
                 {amenity === "Mess/Food" ? "Meals Included" : amenity}
               </label>
@@ -280,7 +231,7 @@ const PGs = () => {
               min="1"
               max="4"
               value={roomCount}
-              onChange={(e) => setRoomCount(parseInt(e.target.value, 10))}
+              onChange={(e) => setRoomCount(parseInt(e.target.value))}
               className="room-slider"
             />
             <div className="room-type-labels">

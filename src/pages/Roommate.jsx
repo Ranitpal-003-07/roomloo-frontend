@@ -98,6 +98,11 @@ const RoommateFinder = () => {
         const roommateData = [];
         querySnapshot.forEach((doc) => {
           const userData = doc.data();
+          if (!userData) {
+            console.error(`No data found for document with ID: ${doc.id}`);
+            return; // Skip this document
+          }
+        
           // Transform Firebase data to match our roommate structure
           roommateData.push({
             id: doc.id,
@@ -111,13 +116,13 @@ const RoommateFinder = () => {
             preference: userData.roomPreference || "Not specified",
             address: userData.currentAddress || "Not specified",
             currentHostel: userData.currentHostel || "Not specified",
+            hasPG: userData.currentHostel ? userData.currentHostel.length > 0 : false,
             hobbies: userData.hobbies || [],
             interests: userData.interests || [],
             wayToHeart: userData.heartWays || [],
             foodsLove: userData.favoriteFoods || [],
             email: userData.email || "Not available",
             field: userData.fieldOfStudy || "Not specified",
-            hasPG: userData.currentHostel.length > 0,
             religion: userData.religion || "Not specified",
             foodPreference: userData.foodPreference || "Not specified",
             smokingHabit: userData.smokingHabit || "Not specified",
@@ -140,6 +145,8 @@ const RoommateFinder = () => {
 
     fetchRoommates();
   }, []);
+
+
   // Calculate match percentage function
   const calculateMatchPercentage = (userData, currentUser) => {
     let matchScore = 0;

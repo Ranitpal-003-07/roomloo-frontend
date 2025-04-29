@@ -1,346 +1,346 @@
 /* RoommateModal.css */
 .rm-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    backdrop-filter: blur(5px);
-  }
-  
-  /* Message Icon */
-.rm-message-icon {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  z-index: 2;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+/* Message Icon */
+.rm-message-icon {
+position: absolute;
+top: 15px;
+right: 15px;
+background: #007bff;
+color: white;
+border: none;
+border-radius: 50%;
+width: 40px;
+height: 40px;
+display: flex;
+align-items: center;
+justify-content: center;
+cursor: pointer;
+transition: all 0.3s;
+z-index: 2;
 }
 
 .rm-message-icon:hover {
-  background: #0056b3;
-  transform: scale(1.1);
+background: #0056b3;
+transform: scale(1.1);
 }
 
 /* Message Section */
 .rm-message-section {
-  position: relative;
-  background: #f8f9fa;
-  padding: 15px;
-  margin: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  z-index: 1;
+position: relative;
+background: #f8f9fa;
+padding: 15px;
+margin: 15px;
+border-radius: 10px;
+box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+z-index: 1;
 }
 
 .rm-message-section h4 {
-  margin-bottom: 10px;
-  color: #333;
+margin-bottom: 10px;
+color: #333;
 }
 
 .rm-message-section textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  resize: vertical;
-  margin-bottom: 10px;
+width: 100%;
+padding: 10px;
+border: 1px solid #ddd;
+border-radius: 5px;
+resize: vertical;
+margin-bottom: 10px;
 }
 
 .rm-send-button {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
+background: #007bff;
+color: white;
+border: none;
+padding: 8px 15px;
+border-radius: 20px;
+display: flex;
+align-items: center;
+gap: 8px;
+cursor: pointer;
+transition: background 0.3s;
 }
 
 .rm-send-button:hover {
-  background: #0056b3;
+background: #0056b3;
 }
 
 .rm-send-button svg {
-  font-size: 0.9em;
+font-size: 0.9em;
 }
-  .rm-modal-content {
-    width: 85%;
-    max-width: 900px;
-    max-height: 90vh;
-    background: #f8f9fa;
-    border-radius: 16px;
-    overflow-y: auto;
-    overflow-x: hidden; /* Prevent horizontal scrollbar */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    position: relative;
-    padding: 0;
-    animation: modalFadeIn 0.3s ease-out;
-    
-    /* Hide scrollbar but maintain functionality */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-  }
+.rm-modal-content {
+  width: 85%;
+  max-width: 900px;
+  max-height: 90vh;
+  background: #f8f9fa;
+  border-radius: 16px;
+  overflow-y: auto;
+  overflow-x: hidden; /* Prevent horizontal scrollbar */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  position: relative;
+  padding: 0;
+  animation: modalFadeIn 0.3s ease-out;
   
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  .rm-modal-content::-webkit-scrollbar {
-    display: none;
+  /* Hide scrollbar but maintain functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.rm-modal-content::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  @keyframes modalFadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  /* Profile Header */
+}
+
+/* Profile Header */
+.rm-profile-header {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  padding: 40px 30px;
+  border-radius: 16px 16px 0 0;
+  position: relative;
+}
+
+.rm-profile-image-container {
+  flex: 0 0 120px;
+  margin-right: 25px;
+}
+
+.rm-profile-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.rm-profile-title-info {
+  flex: 1;
+}
+
+.rm-profile-name {
+  font-size: 2.5rem;
+  margin: 0 0 5px 0;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.rm-profile-badges {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rm-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge-age {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.badge-gender {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Main Grid Layout */
+.rm-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 25px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.rm-grid-item {
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.rm-grid-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Card Styling */
+.rm-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #f1f1f1;
+  padding-bottom: 10px;
+}
+
+.rm-location-header {
+  margin-top: 15px;
+}
+
+.rm-section-icon {
+  margin-right: 10px;
+  background: #f0f0f0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+/* Individual Section Styling */
+.rm-education-location .rm-section-icon {
+  color: #2563eb;
+}
+
+.rm-about-me {
+  grid-column: span 2;
+}
+
+.rm-about-me .rm-section-icon {
+  color: #10b981;
+}
+
+.rm-roommate-preferences {
+  background: linear-gradient(to bottom right, #fef3c7, #fde68a);
+}
+
+.rm-roommate-preferences .rm-section-icon {
+  color: #f59e0b;
+}
+
+.rm-hobbies-interests {
+  grid-column: span 2;
+  background: linear-gradient(to bottom right, #e0f2fe, #bae6fd);
+}
+
+.rm-hobbies-interests .rm-section-icon {
+  color: #0284c7;
+}
+
+.rm-way-to-heart {
+  background: linear-gradient(to bottom right, #fce7f3, #fbcfe8);
+}
+
+.rm-way-to-heart .rm-section-icon {
+  color: #ec4899;
+}
+
+.rm-foods-love {
+  background: linear-gradient(to bottom right, #dcfce7, #bbf7d0);
+}
+
+.rm-foods-love .rm-section-icon {
+  color: #22c55e;
+}
+
+.rm-contact-info {
+  background: linear-gradient(to bottom right, #f1f5f9, #e2e8f0);
+}
+
+.rm-contact-info .rm-section-icon {
+  color: #64748b;
+}
+
+/* Tag Styling */
+.rm-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rm-tag {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.rm-tag-hobby {
+  background-color: #e0f2fe;
+  color: #0284c7;
+}
+
+.rm-tag-interest {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+/* Foods Styling */
+.rm-foods-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rm-food-item {
+  background-color: #dcfce7;
+  color: #16a34a;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .rm-profile-header {
-    display: flex;
-    align-items: center;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: white;
-    padding: 40px 30px;
-    border-radius: 16px 16px 0 0;
-    position: relative;
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
   }
   
   .rm-profile-image-container {
-    flex: 0 0 120px;
-    margin-right: 25px;
-  }
-  
-  .rm-profile-img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  }
-  
-  .rm-profile-title-info {
-    flex: 1;
-  }
-  
-  .rm-profile-name {
-    font-size: 2.5rem;
-    margin: 0 0 5px 0;
-    font-weight: 800;
-    letter-spacing: -0.5px;
+    margin-right: 0;
+    margin-bottom: 15px;
   }
   
   .rm-profile-badges {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-  
-  .rm-badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-  }
-  
-  .badge-age {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-  
-  .badge-gender {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-  
-  /* Main Grid Layout */
-  .rm-profile-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    padding: 25px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .rm-grid-item {
-    background: white;
-    border-radius: 14px;
-    padding: 20px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .rm-grid-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Card Styling */
-  .rm-card-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    border-bottom: 2px solid #f1f1f1;
-    padding-bottom: 10px;
-  }
-  
-  .rm-location-header {
-    margin-top: 15px;
-  }
-  
-  .rm-section-icon {
-    margin-right: 10px;
-    background: #f0f0f0;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    padding: 5px;
   }
   
-  /* Individual Section Styling */
-  .rm-education-location .rm-section-icon {
-    color: #2563eb;
+  .rm-about-me, .rm-hobbies-interests {
+    grid-column: span 1;
   }
   
-  .rm-about-me {
-    grid-column: span 2;
+  .rm-profile-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .rm-about-me .rm-section-icon {
-    color: #10b981;
-  }
-  
-  .rm-roommate-preferences {
-    background: linear-gradient(to bottom right, #fef3c7, #fde68a);
-  }
-  
-  .rm-roommate-preferences .rm-section-icon {
-    color: #f59e0b;
-  }
-  
-  .rm-hobbies-interests {
-    grid-column: span 2;
-    background: linear-gradient(to bottom right, #e0f2fe, #bae6fd);
-  }
-  
-  .rm-hobbies-interests .rm-section-icon {
-    color: #0284c7;
-  }
-  
-  .rm-way-to-heart {
-    background: linear-gradient(to bottom right, #fce7f3, #fbcfe8);
-  }
-  
-  .rm-way-to-heart .rm-section-icon {
-    color: #ec4899;
-  }
-  
-  .rm-foods-love {
-    background: linear-gradient(to bottom right, #dcfce7, #bbf7d0);
-  }
-  
-  .rm-foods-love .rm-section-icon {
-    color: #22c55e;
-  }
-  
-  .rm-contact-info {
-    background: linear-gradient(to bottom right, #f1f5f9, #e2e8f0);
-  }
-  
-  .rm-contact-info .rm-section-icon {
-    color: #64748b;
-  }
-  
-  /* Tag Styling */
-  .rm-tags-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  
-  .rm-tag {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 500;
-  }
-  
-  .rm-tag-hobby {
-    background-color: #e0f2fe;
-    color: #0284c7;
-  }
-  
-  .rm-tag-interest {
-    background-color: #dbeafe;
-    color: #2563eb;
-  }
-  
-  /* Foods Styling */
-  .rm-foods-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  
-  .rm-food-item {
-    background-color: #dcfce7;
-    color: #16a34a;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 500;
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .rm-profile-header {
-      flex-direction: column;
-      text-align: center;
-      padding: 30px 20px;
-    }
-    
-    .rm-profile-image-container {
-      margin-right: 0;
-      margin-bottom: 15px;
-    }
-    
-    .rm-profile-badges {
-      justify-content: center;
-    }
-    
-    .rm-about-me, .rm-hobbies-interests {
-      grid-column: span 1;
-    }
-    
-    .rm-profile-grid {
-      grid-template-columns: 1fr;
-    }
-  }
+}

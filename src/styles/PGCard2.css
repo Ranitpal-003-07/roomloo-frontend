@@ -1,162 +1,207 @@
-/* PGCard.css - Styling for the PG Card component */
+/* PG2Card.css - Modernized styling for the PG2 Card component */
+.pg2-card {
+  background-color: #fff;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05), 0 6px 6px rgba(0, 0, 0, 0.03);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
 
-.pg-card {
-    background-color: #fff;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
-    border: 1px solid #e2e8f0;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .pg-card:hover {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    transform: translateY(-4px);
-  }
-  
-  .pg-card-image-container {
-    position: relative;
-    height: 180px;
-    overflow: hidden;
-  }
-  
-  .pg-card-image {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    transition: transform 0.3s ease;
-  }
-  
-  .pg-card:hover .pg-card-image {
-    transform: scale(1.05);
-  }
-  
-  .pg-card-status {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: capitalize;
-  }
-  
-  .pg-card-status.active {
-    background-color: #10b981;
-    color: white;
-  }
-  
-  .pg-card-status.pending {
-    background-color: #f59e0b;
-    color: white;
-  }
-  
-  .pg-card-status.inactive {
-    background-color: #ef4444;
-    color: white;
-  }
-  
-  .pg-card-occupancy {
-    position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 500;
-  }
-  
-  .pg-card-content {
-    padding: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-  }
-  
-  .pg-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #1e293b;
-  }
-  
-  .pg-location {
-    color: #64748b;
-    font-size: 0.875rem;
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-  }
-  
-  .pg-price {
-    color: #4f46e5;
-    font-weight: 700;
-    font-size: 1.125rem;
-    margin-bottom: 1rem;
-  }
-  
-  .pg-amenities {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.25rem;
-  }
-  
-  .amenity-tag {
-    background-color: #f1f5f9;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    font-size: 0.75rem;
-    color: #334155;
-  }
-  
-  .pg-card-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: auto;
-  }
-  
-  .pg-action-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    border-radius: 0.375rem;
-    font-size: 1rem;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .view-btn {
-    color: #0ea5e9;
-  }
-  
-  .view-btn:hover {
-    background-color: #e0f2fe;
-  }
-  
-  .edit-btn {
-    color: #f59e0b;
-  }
-  
-  .edit-btn:hover {
-    background-color: #fef3c7;
-  }
-  
-  .delete-btn {
-    color: #ef4444;
-  }
-  
-  .delete-btn:hover {
-    background-color: #fee2e2;
-  }
+.pg2-card:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1), 0 8px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-8px);
+}
+
+.pg2-card-image-container {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.pg2-card-image {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease;
+  filter: brightness(0.95);
+}
+
+.pg2-card:hover .pg2-card-image {
+  transform: scale(1.08);
+  filter: brightness(1);
+}
+
+.pg2-card-status {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.35rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pg2-card-status.active {
+  background-color: rgba(16, 185, 129, 0.85);
+  color: white;
+}
+
+.pg2-card-status.pending {
+  background-color: rgba(245, 158, 11, 0.85);
+  color: white;
+}
+
+.pg2-card-status.inactive {
+  background-color: rgba(239, 68, 68, 0.85);
+  color: white;
+}
+
+.pg2-card-occupancy {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.35rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pg2-card-content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(to bottom, #ffffff, #f9fafb);
+  border-top: 1px solid rgba(226, 232, 240, 0.5);
+}
+
+.pg2-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.pg2-title:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, #4f46e5, #818cf8);
+  border-radius: 3px;
+}
+
+.pg2-location {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin-bottom: 0.85rem;
+  display: flex;
+  align-items: center;
+}
+
+.pg2-price {
+  color: #4338ca;
+  font-weight: 800;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+  background: linear-gradient(90deg, #4338ca, #6366f1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pg2-amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.amenity-tag {
+  background-color: #f1f5f9;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  color: #334155;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid #e2e8f0;
+}
+
+.amenity-tag:hover {
+  background-color: #e2e8f0;
+  transform: translateY(-2px);
+}
+
+.pg2-card-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: auto;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px dashed rgba(226, 232, 240, 0.7);
+}
+
+.pg2-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-btn {
+  color: #0ea5e9;
+}
+
+.view-btn:hover {
+  background-color: #e0f2fe;
+  transform: translateY(-3px);
+  box-shadow: 0 3px 6px rgba(14, 165, 233, 0.2);
+}
+
+.edit-btn {
+  color: #f59e0b;
+}
+
+.edit-btn:hover {
+  background-color: #fef3c7;
+  transform: translateY(-3px);
+  box-shadow: 0 3px 6px rgba(245, 158, 11, 0.2);
+}
+
+.delete-btn {
+  color: #ef4444;
+}
+
+.delete-btn:hover {
+  background-color: #fee2e2;
+  transform: translateY(-3px);
+  box-shadow: 0 3px 6px rgba(239, 68, 68, 0.2);
+}

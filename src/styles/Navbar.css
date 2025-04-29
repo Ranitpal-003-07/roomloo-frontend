@@ -15,10 +15,17 @@
 }
 
 .logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: black;
+  display: flex;
+  align-items: center;
+  height: 50px; /* Set a consistent height */
 }
+
+.logo-main {
+  height: 100%; /* Make the image fill the container height */
+  width: auto; /* Maintain aspect ratio */
+  object-fit: contain; /* Ensure the logo isn't distorted */
+}
+
 
 .nav-links-container {
   display: flex;
@@ -191,6 +198,13 @@
 
 /* Responsive Design */
 @media (max-width: 700px) {
+  .navbar {
+    padding: 15px 20px; /* Reduce padding on mobile */
+  }
+  
+  .logo {
+    height: 40px; /* Slightly smaller logo on mobile */
+  }
   .nav-links-container {
     display: none;
   }

@@ -3,10 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc, updateDoc, arrayUnion, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
-import axios from 'axios';
 import '../styles/ChatCard.css';
+import axios from 'axios';
 import { getAuth } from "firebase/auth";
-
 
 const ChatCard = ({ chat, currentUser, onSelectChat, selectedChatId }) => {
   const [otherUserInfo, setOtherUserInfo] = useState(null);
@@ -14,6 +13,7 @@ const ChatCard = ({ chat, currentUser, onSelectChat, selectedChatId }) => {
   const [newMessage, setNewMessage] = useState('');
   const [userMessageCount, setUserMessageCount] = useState(0);
   const [messageLimitReached, setMessageLimitReached] = useState(false);
+
 
   const isSelected = selectedChatId === chat.id;
 

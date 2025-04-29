@@ -3,11 +3,10 @@ import { FiX, FiChevronRight, FiChevronLeft, FiCheck } from 'react-icons/fi';
 import "../styles/PostModal2.css";
 import { collection, addDoc, updateDoc, doc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { db, storage } from "../firebase"; // Assuming you have firebase config file
+import { db, storage } from "../firebase";
 import axios from "axios"; 
 
-
-const PostModal = ({ isOpen, onClose, onSave, editingListing,userId }) => {
+const PostModal = ({ isOpen, onClose, onSave, editingListing, userId }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -28,36 +27,31 @@ const PostModal = ({ isOpen, onClose, onSave, editingListing,userId }) => {
     description: '',
     rules: '',
     images: [],
-    imageFiles: [] // To store the actual file objects
+    imageFiles: []
   });
   
-  // Populate form when editing an existing listing
   useEffect(() => {
     if (editingListing) {
       setFormData({
         ...editingListing,
-        // Add any fields that might be missing in the listing object
         description: editingListing.description || '',
         rules: editingListing.rules || '',
-        imageFiles: [] // Reset image files when editing
+        imageFiles: []
       });
     }
   }, [editingListing]);
 
-  // List of all possible amenities
   const allAmenities = [
     'AC', 'Non-AC', '24/7 Power Backup', 'WiFi', 'Parking', 'Mess/Food',
     'Elevator', 'TV', 'Gym', 'Laundry', 'Security', 'Cleaning Service',
     'Refrigerator', 'Washing Machine', 'Swimming Pool'
   ];
 
-  // Handle form field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle amenity checkbox changes
   const handleAmenityChange = (amenity) => {
     const updatedAmenities = formData.amenities.includes(amenity)
       ? formData.amenities.filter(a => a !== amenity)
@@ -66,13 +60,10 @@ const PostModal = ({ isOpen, onClose, onSave, editingListing,userId }) => {
     setFormData({ ...formData, amenities: updatedAmenities });
   };
 
-  // Handle image upload
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     if (files.length > 0) {
       const newImageFiles = [...formData.imageFiles, ...files];
-      
-      // Create preview URLs
       const newImageURLs = files.map(file => URL.createObjectURL(file));
       const updatedImages = [...formData.images, ...newImageURLs];
       
@@ -84,7 +75,6 @@ const PostModal = ({ isOpen, onClose, onSave, editingListing,userId }) => {
     }
   };
 
-  // Remove an image
   const removeImage = (index) => {
     const updatedImages = [...formData.images];
     const updatedImageFiles = [...formData.imageFiles];
@@ -99,21 +89,17 @@ const PostModal = ({ isOpen, onClose, onSave, editingListing,userId }) => {
     });
   };
 
-  // Upload images to Firebase Storage
-  const uploadImages = async () => {
+  const uploadImages = async (pgId) => {
     if (formData.imageFiles.length === 0) return [];
     
     const imageUrls = [];
     
     for (const file of formData.imageFiles) {
-      // Create a reference to the file in Firebase Storage
-      const storageRef = ref(storage, `pg_images/${Date.now()}_${file.name}`);
+      // Create a reference with PG ID folder
+      const storageRef = ref(storage, `pg_images/${pgId}/${Date.now()}_${file.name}`);
       
       try {
-        // Upload file
         const snapshot = await uploadBytes(storageRef, file);
-        
-        // Get download URL
         const downloadURL = await getDownloadURL(snapshot.ref);
         imageUrls.push(downloadURL);
       } catch (error) {
@@ -124,60 +110,54 @@ const PostModal = ({ isOpen, onClose, onSave, editingListing,userId }) => {
     return imageUrls;
   };
 
-  // Handle form submission
- // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+  
+    try {
+      // 1. Upload images and get URLs
+      const imageUrls = await uploadImages();
+  
+      // 2. Prepare data for Firestore
+      const pgData = {
+        ...formData,
+        images: editingListing ? [...editingListing.images || [], ...imageUrls] : imageUrls,
+        createdAt: editingListing ? editingListing.createdAt : new Date(),
+        updatedAt: new Date(),
+        ownerId: editingListing ? editingListing.ownerId : userId,
+      };
+  
+      // Remove temporary data
+      delete pgData.imageFiles;
+  
+      // 3. Save to Firestore
+      if (editingListing && editingListing.id) {
+        await updateDoc(doc(db, "pgListings", editingListing.id), pgData);
+      } else {
+        await addDoc(collection(db, "pgListings"), pgData);
+      }
+  
+      // 4. Send the data to Laravel backend
+      await axios.post('http://127.0.0.1:8000/api/pgs', {
+        ...pgData,
+        createdAt: pgData.createdAt.toISOString(), // Convert Date object to string if needed
+        updatedAt: pgData.updatedAt.toISOString(),
+      });
+  
+      // 5. Call onSave callback
+      onSave(pgData);
+      setLoading(false);
+  
+    } catch (error) {
+      console.error("Error saving PG listing:", error);
+      setLoading(false);
+      // Show error to user if needed
+    }
+  };
+  
 
- // ...
- 
- const handleSubmit = async (e) => {
-   e.preventDefault();
-   setLoading(true);
- 
-   try {
-     // 1. Upload images and get URLs
-     const imageUrls = await uploadImages();
- 
-     // 2. Prepare data for Firestore
-     const pgData = {
-       ...formData,
-       images: editingListing ? [...editingListing.images || [], ...imageUrls] : imageUrls,
-       createdAt: editingListing ? editingListing.createdAt : new Date(),
-       updatedAt: new Date(),
-       ownerId: editingListing ? editingListing.ownerId : userId,
-     };
- 
-     // Remove temporary data
-     delete pgData.imageFiles;
- 
-     // 3. Save to Firestore
-     if (editingListing && editingListing.id) {
-       await updateDoc(doc(db, "pgListings", editingListing.id), pgData);
-     } else {
-       await addDoc(collection(db, "pgListings"), pgData);
-     }
- 
-     // 4. Send the data to Laravel backend
-     await axios.post('http://127.0.0.1:8000/api/pgs', {
-       ...pgData,
-       createdAt: pgData.createdAt.toISOString(), // Convert Date object to string if needed
-       updatedAt: pgData.updatedAt.toISOString(),
-     });
- 
-     // 5. Call onSave callback
-     onSave(pgData);
-     setLoading(false);
- 
-   } catch (error) {
-     console.error("Error saving PG listing:", error);
-     setLoading(false);
-     // Show error to user if needed
-   }
- };
- 
-  // Step navigation
   const nextStep = () => setCurrentStep(currentStep + 1);
   const prevStep = () => setCurrentStep(currentStep - 1);
-
   // Render the current step form
   const renderStepContent = () => {
     switch (currentStep) {

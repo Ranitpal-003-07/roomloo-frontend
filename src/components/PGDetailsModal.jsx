@@ -33,33 +33,33 @@ const PGDetailsModal = ({ pg, onClose }) => {
   };
 
   return (
-    <div className={`modal-overlay ${pg ? 'active' : ''}`} onClick={onClose}>
-      <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-        <button className="close-modal-btn" onClick={onClose}>
+    <div className={`pgd-overlay ${pg ? 'pgd-active' : ''}`} onClick={onClose}>
+      <div className="pgd-container" onClick={(e) => e.stopPropagation()}>
+        <button className="pgd-close-btn" onClick={onClose}>
           <FiX />
         </button>
 
-        <div className="modal-content">
+        <div className="pgd-content">
           {/* Image Gallery */}
-          <div className="pg-gallery">
+          <div className="pgd-gallery">
             {pg.images && pg.images.length > 0 ? (
               <>
-                <div className="main-image-container">
+                <div className="pgd-main-image-wrapper">
                   <img
                     src={pg.images[currentImageIndex]}
                     alt={`${pg.title} - Image ${currentImageIndex + 1}`}
-                    className="main-image"
+                    className="pgd-main-image"
                   />
                   
                   {pg.images.length > 1 && (
                     <>
-                      <button className="gallery-nav prev" onClick={handlePrevImage}>
+                      <button className="pgd-nav pgd-prev" onClick={handlePrevImage}>
                         <FiChevronLeft />
                       </button>
-                      <button className="gallery-nav next" onClick={handleNextImage}>
+                      <button className="pgd-nav pgd-next" onClick={handleNextImage}>
                         <FiChevronRight />
                       </button>
-                      <div className="image-counter">
+                      <div className="pgd-counter">
                         {currentImageIndex + 1} / {pg.images.length}
                       </div>
                     </>
@@ -67,11 +67,11 @@ const PGDetailsModal = ({ pg, onClose }) => {
                 </div>
                 
                 {pg.images.length > 1 && (
-                  <div className="thumbnail-gallery">
+                  <div className="pgd-thumbnails">
                     {pg.images.map((img, idx) => (
                       <div 
                         key={idx} 
-                        className={`thumbnail ${idx === currentImageIndex ? 'active' : ''}`}
+                        className={`pgd-thumb ${idx === currentImageIndex ? 'pgd-active' : ''}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           setCurrentImageIndex(idx);
@@ -84,16 +84,16 @@ const PGDetailsModal = ({ pg, onClose }) => {
                 )}
               </>
             ) : (
-              <div className="no-image">No images available</div>
+              <div className="pgd-no-image">No images available</div>
             )}
           </div>
 
           {/* PG Details */}
-          <div className="pg-details-content">
-            <div className="pg-header">
-              <h2>{pg.title}</h2>
-              <div className="pg-location-display">
-                <FiMapPin />
+          <div className="pgd-details">
+            <div className="pgd-header">
+              <h2 className="pgd-title">{pg.title}</h2>
+              <div className="pgd-location">
+                <FiMapPin className="pgd-icon" />
                 <span>{pg.location} {pg.address ? `- ${pg.address}` : ''}</span>
               </div>
               {pg.googleMapLink && (
@@ -101,18 +101,18 @@ const PGDetailsModal = ({ pg, onClose }) => {
                   href={pg.googleMapLink} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="map-link"
+                  className="pgd-map-link"
                 >
                   View on Google Maps
                 </a>
               )}
             </div>
 
-            <div className="pg-price-section">
-              <div className="price-display">
-                <span className="price-amount">{formatPrice(pg.price)}</span>
+            <div className="pgd-price-box">
+              <div className="pgd-price">
+                <span className="pgd-price-amount">{formatPrice(pg.price)}</span>
               </div>
-              <div className="room-type-display">
+              <div className="pgd-room-type">
                 {pg.roomType === 'Sharing' && pg.sharingType 
                   ? pg.sharingType 
                   : pg.roomType || "Single Room"}
@@ -121,84 +121,86 @@ const PGDetailsModal = ({ pg, onClose }) => {
 
             {/* Description */}
             {pg.description && (
-              <div className="pg-section">
-                <h3>Description</h3>
-                <p>{pg.description}</p>
+              <div className="pgd-section">
+                <h3 className="pgd-section-title">Description</h3>
+                <p className="pgd-description">{pg.description}</p>
               </div>  
             )}
 
             {/* Amenities */}
-            <div className="pg-section">
-              <h3>Amenities</h3>
-              <div className="amenities-grid">
+            <div className="pgd-section">
+              <h3 className="pgd-section-title">Amenities</h3>
+              <div className="pgd-amenities">
                 {pg.amenities && pg.amenities.length > 0 ? (
                   pg.amenities.map((amenity, index) => (
-                    <div key={index} className="amenity-item">
-                      <span className="amenity-check">✓</span>
+                    <div key={index} className="pgd-amenity">
+                      <span className="pgd-check">✓</span>
                       {amenity}
                     </div>
                   ))
                 ) : (
-                  <p>No amenities listed</p>
+                  <p className="pgd-no-data">No amenities listed</p>
                 )}
               </div>
             </div>
 
             {/* Nearby Places */}
-            <div className="pg-section">
-              <h3>Nearby Places</h3>
-              <div className="nearby-places">
+            <div className="pgd-section">
+              <h3 className="pgd-section-title">Nearby Places</h3>
+              <div className="pgd-nearby">
                 {pg.nearbyCollege && (
-                  <div className="nearby-item">
-                    <span className="nearby-label">College:</span>
-                    <span>{pg.nearbyCollege}</span>
+                  <div className="pgd-nearby-item">
+                    <span className="pgd-nearby-label">College:</span>
+                    <span className="pgd-nearby-value">{pg.nearbyCollege}</span>
                   </div>
                 )}
                 {pg.nearbyMetro && (
-                  <div className="nearby-item">
-                    <span className="nearby-label">Metro Station:</span>
-                    <span>{pg.nearbyMetro}</span>
+                  <div className="pgd-nearby-item">
+                    <span className="pgd-nearby-label">Metro Station:</span>
+                    <span className="pgd-nearby-value">{pg.nearbyMetro}</span>
                   </div>
                 )}
                 {pg.nearbyBusStand && (
-                  <div className="nearby-item">
-                    <span className="nearby-label">Bus Stand:</span>
-                    <span>{pg.nearbyBusStand}</span>
+                  <div className="pgd-nearby-item">
+                    <span className="pgd-nearby-label">Bus Stand:</span>
+                    <span className="pgd-nearby-value">{pg.nearbyBusStand}</span>
                   </div>
                 )}
                 {pg.nearbyLandmark && (
-                  <div className="nearby-item">
-                    <span className="nearby-label">Landmark:</span>
-                    <span>{pg.nearbyLandmark}</span>
+                  <div className="pgd-nearby-item">
+                    <span className="pgd-nearby-label">Landmark:</span>
+                    <span className="pgd-nearby-value">{pg.nearbyLandmark}</span>
                   </div>
                 )}
                 {!pg.nearbyCollege && !pg.nearbyMetro && !pg.nearbyBusStand && !pg.nearbyLandmark && (
-                  <p>No nearby places information available</p>
+                  <p className="pgd-no-data">No nearby places information available</p>
                 )}
               </div>
             </div>
 
             {/* Rules */}
             {pg.rules && (
-              <div className="pg-section">
-                <h3>House Rules</h3>
-                <p>{pg.rules}</p>
+              <div className="pgd-section">
+                <h3 className="pgd-section-title">House Rules</h3>
+                <p className="pgd-rules">{pg.rules}</p>
               </div>
             )}
 
             {/* Contact Information */}
-            <div className="pg-section contact-section">
-              <h3>Contact Information</h3>
-              {pg.ownerPhone && (
-                <a href={`tel:${pg.ownerPhone}`} className="contact-button phone">
-                  <FiPhone /> Call Owner
-                </a>
-              )}
-              {pg.ownerEmail && (
-                <a href={`mailto:${pg.ownerEmail}`} className="contact-button email">
-                  <FiMail /> Email Owner
-                </a>
-              )}
+            <div className="pgd-section pgd-contact">
+              <h3 className="pgd-section-title">Contact Information</h3>
+              <div className="pgd-contact-buttons">
+                {pg.ownerPhone && (
+                  <a href={`tel:${pg.ownerPhone}`} className="pgd-contact-btn pgd-phone">
+                    <FiPhone className="pgd-icon" /> Call Owner
+                  </a>
+                )}
+                {pg.ownerEmail && (
+                  <a href={`mailto:${pg.ownerEmail}`} className="pgd-contact-btn pgd-email">
+                    <FiMail className="pgd-icon" /> Email Owner
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>

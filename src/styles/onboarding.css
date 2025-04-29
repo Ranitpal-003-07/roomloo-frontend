@@ -1,324 +1,324 @@
 /* Onboarding styles with modern theme to match profile styling */
 :root {
-    /* Color variables from profile styling */
-    --pr-primary: #6366f1;
-    --pr-primary-dark: #4f46e5;
-    --pr-primary-light: #818cf8;
-    --pr-secondary: #14b8a6;
-    --pr-secondary-light: #2dd4bf;
-    --pr-accent: #f59e0b;
-    --pr-accent-light: #fbbf24;
-    --pr-dark: #0f172a;
-    --pr-dark-blue: #1e293b;
-    --pr-gray: #94a3b8;
-    --pr-light-gray: #cbd5e1;
-    --pr-light: #f8fafc;
-    --pr-danger: #ef4444;
-    --pr-success: #10b981;
-    --pr-info: #06b6d4;
-    
-    /* Shadows and effects */
-    --pr-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    --pr-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --pr-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    --pr-radius: 16px;
-    --pr-radius-lg: 24px;
-    --pr-radius-full: 9999px;
-    --pr-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    
-    /* Gradients */
-    --pr-gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    --pr-gradient-secondary: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
-    --pr-gradient-accent: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
-  }
+  /* Color variables from profile styling */
+  --pr-primary: #6366f1;
+  --pr-primary-dark: #4f46e5;
+  --pr-primary-light: #818cf8;
+  --pr-secondary: #14b8a6;
+  --pr-secondary-light: #2dd4bf;
+  --pr-accent: #f59e0b;
+  --pr-accent-light: #fbbf24;
+  --pr-dark: #0f172a;
+  --pr-dark-blue: #1e293b;
+  --pr-gray: #94a3b8;
+  --pr-light-gray: #cbd5e1;
+  --pr-light: #f8fafc;
+  --pr-danger: #ef4444;
+  --pr-success: #10b981;
+  --pr-info: #06b6d4;
   
-  /* Onboarding Container */
+  /* Shadows and effects */
+  --pr-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --pr-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --pr-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --pr-radius: 16px;
+  --pr-radius-lg: 24px;
+  --pr-radius-full: 9999px;
+  --pr-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  /* Gradients */
+  --pr-gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  --pr-gradient-secondary: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+  --pr-gradient-accent: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+}
+
+/* Onboarding Container */
+.onboarding-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 30px;
+  border-radius: var(--pr-radius-lg);
+  box-shadow: var(--pr-shadow-lg);
+  background: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%);
+  font-family: 'Outfit', 'Inter', sans-serif;
+  color: var(--pr-dark);
+  position: relative;
+}
+
+/* Progress Bar */
+.onboarding-progress-container {
+  width: 100%;
+  height: 8px;
+  background-color: var(--pr-light-gray);
+  border-radius: var(--pr-radius-full);
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.onboarding-progress-bar {
+  height: 100%;
+  background: var(--pr-gradient-primary);
+  border-radius: var(--pr-radius-full);
+  transition: width 0.5s ease;
+}
+
+/* Header */
+.onboarding-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.onboarding-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: var(--pr-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.onboarding-header p {
+  font-size: 1.1rem;
+  color: var(--pr-gray);
+  font-weight: 500;
+}
+
+/* Step Container */
+.onboarding-step-container {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.onboarding-step-container h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--pr-dark-blue);
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.onboarding-step-container h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: var(--pr-gradient-primary);
+  border-radius: 4px;
+}
+
+.onboarding-step-container > p {
+  margin-bottom: 2rem;
+  color: var(--pr-gray);
+}
+
+/* Form Fields */
+.onboarding-field {
+  margin-bottom: 1.5rem;
+}
+
+.onboarding-field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--pr-dark-blue);
+  font-size: 1rem;
+}
+
+.onboarding-field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.onboarding-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Input styling */
+.onboarding-field input,
+.onboarding-field select,
+.onboarding-field textarea {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--pr-light-gray);
+  border-radius: var(--pr-radius);
+  font-size: 1rem;
+  transition: var(--pr-transition);
+  box-shadow: var(--pr-shadow-sm);
+  background-color: white;
+  color: var(--pr-dark);
+  font-family: inherit;
+}
+
+.onboarding-field input:focus,
+.onboarding-field select:focus,
+.onboarding-field textarea:focus {
+  outline: none;
+  border-color: var(--pr-primary-light);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Array Items */
+.onboarding-array-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Buttons */
+.onboarding-add-btn {
+  background-color: transparent;
+  color: var(--pr-primary);
+  border: 1px solid var(--pr-primary-light);
+  border-radius: var(--pr-radius);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: var(--pr-transition);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.onboarding-add-btn:hover {
+  background-color: rgba(99, 102, 241, 0.1);
+}
+
+.onboarding-remove-btn {
+  background-color: transparent;
+  color: var(--pr-gray);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--pr-transition);
+  flex-shrink: 0;
+}
+
+.onboarding-remove-btn:hover {
+  color: var(--pr-danger);
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Action Buttons */
+.onboarding-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+}
+
+.onboarding-back-btn {
+  padding: 0.8rem 1.5rem;
+  background-color: white;
+  color: var(--pr-dark);
+  border: 1px solid var(--pr-light-gray);
+  border-radius: var(--pr-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--pr-transition);
+  box-shadow: var(--pr-shadow-sm);
+}
+
+.onboarding-back-btn:hover {
+  background-color: var(--pr-light);
+  box-shadow: var(--pr-shadow);
+}
+
+.onboarding-next-btn {
+  padding: 0.8rem 2rem;
+  background: var(--pr-gradient-primary);
+  color: white;
+  border: none;
+  border-radius: var(--pr-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--pr-transition);
+  box-shadow: var(--pr-shadow);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.onboarding-next-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--pr-shadow-lg);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .onboarding-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 30px;
-    border-radius: var(--pr-radius-lg);
-    box-shadow: var(--pr-shadow-lg);
-    background: linear-gradient(180deg, #f1f5f9 0%, #ffffff 100%);
-    font-family: 'Outfit', 'Inter', sans-serif;
-    color: var(--pr-dark);
-    position: relative;
-  }
-  
-  /* Progress Bar */
-  .onboarding-progress-container {
-    width: 100%;
-    height: 8px;
-    background-color: var(--pr-light-gray);
-    border-radius: var(--pr-radius-full);
-    margin-bottom: 2rem;
-    overflow: hidden;
-  }
-  
-  .onboarding-progress-bar {
-    height: 100%;
-    background: var(--pr-gradient-primary);
-    border-radius: var(--pr-radius-full);
-    transition: width 0.5s ease;
-  }
-  
-  /* Header */
-  .onboarding-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-  
-  .onboarding-header h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    background: var(--pr-gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  
-  .onboarding-header p {
-    font-size: 1.1rem;
-    color: var(--pr-gray);
-    font-weight: 500;
-  }
-  
-  /* Step Container */
-  .onboarding-step-container {
-    animation: fadeIn 0.5s ease;
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .onboarding-step-container h2 {
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    color: var(--pr-dark-blue);
-    position: relative;
-    padding-bottom: 0.5rem;
-  }
-  
-  .onboarding-step-container h2::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60px;
-    height: 4px;
-    background: var(--pr-gradient-primary);
-    border-radius: 4px;
-  }
-  
-  .onboarding-step-container > p {
-    margin-bottom: 2rem;
-    color: var(--pr-gray);
-  }
-  
-  /* Form Fields */
-  .onboarding-field {
-    margin-bottom: 1.5rem;
-  }
-  
-  .onboarding-field label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: var(--pr-dark-blue);
-    font-size: 1rem;
-  }
-  
-  .onboarding-field-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
+    padding: 20px;
+    margin: 1rem;
   }
   
   .onboarding-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
+  }
+  
+  .onboarding-header h1 {
+    font-size: 2rem;
+  }
+  
+  .onboarding-actions {
+    flex-direction: column-reverse;
     gap: 1rem;
   }
   
-  /* Input styling */
-  .onboarding-field input,
-  .onboarding-field select,
-  .onboarding-field textarea {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid var(--pr-light-gray);
-    border-radius: var(--pr-radius);
-    font-size: 1rem;
-    transition: var(--pr-transition);
-    box-shadow: var(--pr-shadow-sm);
-    background-color: white;
-    color: var(--pr-dark);
-    font-family: inherit;
-  }
-  
-  .onboarding-field input:focus,
-  .onboarding-field select:focus,
-  .onboarding-field textarea:focus {
-    outline: none;
-    border-color: var(--pr-primary-light);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-  }
-  
-  /* Array Items */
-  .onboarding-array-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  /* Buttons */
-  .onboarding-add-btn {
-    background-color: transparent;
-    color: var(--pr-primary);
-    border: 1px solid var(--pr-primary-light);
-    border-radius: var(--pr-radius);
-    padding: 0.4rem 0.8rem;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: var(--pr-transition);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .onboarding-add-btn:hover {
-    background-color: rgba(99, 102, 241, 0.1);
-  }
-  
-  .onboarding-remove-btn {
-    background-color: transparent;
-    color: var(--pr-gray);
-    border: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--pr-transition);
-    flex-shrink: 0;
-  }
-  
-  .onboarding-remove-btn:hover {
-    color: var(--pr-danger);
-    background-color: rgba(239, 68, 68, 0.1);
-  }
-  
-  /* Action Buttons */
-  .onboarding-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 3rem;
-  }
-  
+  .onboarding-next-btn,
   .onboarding-back-btn {
-    padding: 0.8rem 1.5rem;
-    background-color: white;
-    color: var(--pr-dark);
-    border: 1px solid var(--pr-light-gray);
-    border-radius: var(--pr-radius);
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--pr-transition);
-    box-shadow: var(--pr-shadow-sm);
+    width: 100%;
+    justify-content: center;
   }
-  
-  .onboarding-back-btn:hover {
-    background-color: var(--pr-light);
-    box-shadow: var(--pr-shadow);
+}
+
+/* Animations for other elements */
+.onboarding-field {
+  animation: slideIn 0.5s ease;
+  animation-delay: calc(var(--i, 0) * 0.1s);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
   }
-  
-  .onboarding-next-btn {
-    padding: 0.8rem 2rem;
-    background: var(--pr-gradient-primary);
-    color: white;
-    border: none;
-    border-radius: var(--pr-radius);
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--pr-transition);
-    box-shadow: var(--pr-shadow);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
-  
-  .onboarding-next-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--pr-shadow-lg);
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .onboarding-container {
-      padding: 20px;
-      margin: 1rem;
-    }
-    
-    .onboarding-row {
-      grid-template-columns: 1fr;
-    }
-    
-    .onboarding-header h1 {
-      font-size: 2rem;
-    }
-    
-    .onboarding-actions {
-      flex-direction: column-reverse;
-      gap: 1rem;
-    }
-    
-    .onboarding-next-btn,
-    .onboarding-back-btn {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-  
-  /* Animations for other elements */
-  .onboarding-field {
-    animation: slideIn 0.5s ease;
-    animation-delay: calc(var(--i, 0) * 0.1s);
-  }
-  
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
-  /* FontAwesome Icon styling */
-  .onboarding-field label svg,
-  .onboarding-field-header label svg {
-    margin-right: 0.5rem;
-    color: var(--pr-primary);
-  }
-  
-  /* Placeholder styling */
-  ::placeholder {
-    color: var(--pr-gray);
-    opacity: 0.7;
-  }
+}
+
+/* FontAwesome Icon styling */
+.onboarding-field label svg,
+.onboarding-field-header label svg {
+  margin-right: 0.5rem;
+  color: var(--pr-primary);
+}
+
+/* Placeholder styling */
+::placeholder {
+  color: var(--pr-gray);
+  opacity: 0.7;
+}
